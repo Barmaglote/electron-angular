@@ -10,7 +10,7 @@
 ## Установка Electron Forge: Установите Electron Forge в ваш проект:
 
 > npm install --save-dev @electron-forge/cli
-npx electron-forge import
+> npx electron-forge import
 
 Команда electron-forge import создаст структуру файлов, включая src, main.js и добавит зависимости для Electron.
 
