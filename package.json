@@ -1,0 +1,66 @@
+{
+  "name": "electron-angular",
+  "version": "1.0.0",
+  "description": "Hello World for Electron &amp; Angular app",
+  "main": "src/electron-app/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "start:angular:dev": "ng serve --open && electron .",
+    "start:angular:prod": "ng build --prod && electron-forge start",
+    "start:forge": "electron-forge start",
+    "publish": "electron-forge publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.6.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron": "^34.0.0",
+    "electron-prebuilt-compile": "^8.2.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "import": "^0.0.6",
+    "npx": "^10.2.2"
+  },
+  "dependencies": {
+    "electron-compile": "^6.4.4",
+    "electron-squirrel-startup": "^1.0.1"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm"
+      },
+      "electronWinstallerConfig": {
+        "name": "electron_angular"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "electronangular"
+      }
+    }
+  }
+}
