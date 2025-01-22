@@ -5,7 +5,9 @@
   "main": "src/electron-app/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
+    "start:angular": "cd src/angular-app && ng serve --open",
+    "start:electron": "wait-on http://localhost:4200 && electron .",
+    "start": "concurrently \"npm run start:angular\" \"npm run start:electron\"",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "start:angular:dev": "ng serve --open && electron .",
@@ -21,6 +23,7 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "concurrently": "^9.1.2",
     "electron": "^34.0.0",
     "electron-prebuilt-compile": "^8.2.0",
     "electron-reload": "^2.0.0-alpha.1",
