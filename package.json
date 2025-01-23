@@ -37,7 +37,8 @@
     "electron-prebuilt-compile": "^8.2.0",
     "electron-reload": "^2.0.0-alpha.1",
     "import": "^0.0.6",
-    "npx": "^10.2.2"
+    "npx": "^10.2.2",
+    "wait-on": "^8.0.2"
   },
   "dependencies": {
     "electron-compile": "^6.4.4",
