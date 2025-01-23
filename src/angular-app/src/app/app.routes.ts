@@ -5,4 +5,8 @@ export const routes: Routes = [
     path: 'bookmarks-manager',
     loadChildren: () => import('./modules/bookmarks-manager/routes').then(m => m.routes)
   },
+  {
+    path: 'self-test',
+    loadChildren: () => import('./modules/self-test/routes').then(m => m.routes)
+  },
 ];

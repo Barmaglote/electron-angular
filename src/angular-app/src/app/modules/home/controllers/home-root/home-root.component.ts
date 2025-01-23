@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   standalone: true,
   selector: 'app-home-root',
   templateUrl: './home-root.component.html',
-  styleUrls: ['./home-root.component.css']
+  styleUrls: ['./home-root.component.scss']
 })
 export class HomeRootComponent implements OnInit {
 
