@@ -1,0 +1,1 @@
+(async()=>{const n=await window.versions.ping();console.log(n)})();

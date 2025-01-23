@@ -1,0 +1,11 @@
+node_modules/
+src/angular-app/
+!src/electron-app/
+!src/angular-app/dist/angular-app/
+src/
+test/
+docs/
+*.log
+*.md
+.git/
+.vscode/

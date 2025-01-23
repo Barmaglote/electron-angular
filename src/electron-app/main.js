@@ -1,7 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
+const { globalShortcut } = require('electron');
 const path = require('path');
+const isDev = process.env.NODE_ENV === 'development';
+let win;
 
-const isDev = true;
+console.log('App started in:', isDev ? 'Development' : 'Production', 'mode');
+console.log('App path:', __dirname);
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -11,17 +15,26 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: true,
-      webSecurity: false
+      webSecurity: false,
+      allowRunningInsecureContent: false
     }
-  })
+  });
 
   if (isDev) {
+    win.webContents.openDevTools();
     win.loadURL('http://localhost:4200');
   } else {
-    win.loadURL(path.join(__dirname, 'index.html'));
+    console.log(path.join(__dirname, '../../../angular-app/browser/index.html'));
+    win.loadFile(path.join(__dirname, '../../../angular-app/browser/index.html'));
   }
-  //win.webContents.openDevTools();
+  win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Failed to load:', validatedURL, errorDescription);
+  });
 }
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
 
 app.whenReady().then(() => {
   createWindow()
@@ -36,13 +49,23 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('ping', () => 'pong');
-})
+
+  if (isDev) {
+    globalShortcut.register('F12', () => {
+      if (win) {
+        win.webContents.toggleDevTools();
+      }
+    });
+  }
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-require('electron-reload')(path.join(__dirname), {
-  electron: require(`${__dirname}/../../node_modules/electron`),
-});
+if (isDev) {
+  require('electron-reload')(path.join(__dirname), {
+    electron: require(`${__dirname}/../../node_modules/electron`),
+  });
+}
 
