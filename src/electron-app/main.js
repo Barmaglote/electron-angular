@@ -2,8 +2,8 @@ const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const { globalShortcut } = require('electron');
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
+const fetch = require('node-fetch');
 let win;
-let homeUrl = isDev ? 'http://localhost:4200' : path.join(__dirname, '../../../angular-app/browser/index.html');
 
 const createWindow = () => {
   win = new BrowserWindow({
@@ -12,16 +12,17 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false,
-      webSecurity: false,
-      allowRunningInsecureContent: false
+      contextIsolation: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      contentSecurityPolicy: "default-src 'self'; script-src 'self';",
     }
   });
 
   if (isDev) {
-    win.loadURL(homeUrl);
+    win.loadURL('http://localhost:4200');
   } else {
-    win.loadFile(homeUrl);
+    win.loadFile(path.join(__dirname, '../../../angular-app/browser/index.html'));
   }
 
   win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
@@ -41,13 +42,6 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  ipcMain.on('toMain', (event, args) => {
-    console.log('Message from renderer:', args);
-    event.sender.send('fromMain', 'Hello from main process!');
-  });
-
-  ipcMain.handle('ping', () => 'pong');
-
   if (isDev) {
     globalShortcut.register('F12', () => {
       if (win) {
@@ -66,6 +60,17 @@ if (isDev) {
     electron: require(`${__dirname}/../../node_modules/electron`),
   });
 }
+
+ipcMain.handle('fetch-url', async (event, url) => {
+  try {
+    const response = await fetch(url);
+    const text = await response.text();
+    return text;
+  } catch (error) {
+    console.error('Ошибка запроса:', error);
+    throw error;
+  }
+});
 
 const createMenu = () => {
   template = [
@@ -97,7 +102,7 @@ const createMenu = () => {
           }
         },
         {
-          label: 'Book Manager',
+          label: 'Bookmarks Manager',
           click: () => {
             win.webContents.send('navigate-to-page', 'bookmarks-manager');
           }
@@ -137,6 +142,12 @@ const createMenu = () => {
           label: 'About',
           click: () => {
             windows.electron.showAlert('About programm');
+          }
+        },
+        {
+          label: 'DevTools',
+          click: () => {
+            win.toggleDevTools();
           }
         }
       ]

@@ -1,0 +1,30 @@
+<div *ngIf="items?.length; else noItems" class="flex flex-wrap gap-2">
+  <div *ngFor="let item of items">
+    @defer {
+      <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+        <ng-template #header>
+            <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+        </ng-template>
+        <ng-template #title><div class="flex h-3rem"> {{item?.title | truncate:70}} </div></ng-template>
+        <ng-template #subtitle> {{ item?.url | truncate:50 }} </ng-template>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+            quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+        </p>
+        <ng-template #footer>
+            <div class="flex gap-4 mt-1">
+                <p-button label="Open" severity="secondary" class="w-full" [outlined]="true" (onClick)="openItem.emit(item)" styleClass="w-full" />
+                <p-button label="Delete" class="w-full" styleClass="w-full p-button-danger" (onClick)="deleteItem.emit(item)" />
+            </div>
+        </ng-template>
+      </p-card>
+    }
+    @placeholder (minimum 1s) {
+      <p-skeleton height="25rem" styleClass="mb-2" borderRadius="16px" />
+    }
+  </div>
+</div>
+
+<ng-template #noItems>
+  <p>No bookmarks available.</p>
+</ng-template>

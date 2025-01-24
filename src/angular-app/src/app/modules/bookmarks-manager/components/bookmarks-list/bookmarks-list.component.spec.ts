@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { HomeRootComponent } from './home-root.component';
+import { BookmarksListComponent } from './bookmarks-list.component';
 
-describe('HomeRootComponent', () => {
-  let component: HomeRootComponent;
-  let fixture: ComponentFixture<HomeRootComponent>;
+describe('BookmarksListComponent', () => {
+  let component: BookmarksListComponent;
+  let fixture: ComponentFixture<BookmarksListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeRootComponent ]
+      declarations: [ BookmarksListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeRootComponent);
+    fixture = TestBed.createComponent(BookmarksListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

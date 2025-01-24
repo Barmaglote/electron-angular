@@ -1,21 +1,7 @@
 @use 'primeflex/primeflex' as pf;
 
-$primary-color: #FF5722;
-$secondary-color: #03A9F4;
-
-$font-family: 'Roboto', sans-serif;
-$font-size: 0.8rem;
-
-.p-button {
-  background-color: $primary-color;
-  font-family: $font-family;
-  font-size: $font-size;
-  padding: 0.7rem;
-  border-radius: 5px;
-  text-decoration: none;
-  color: antiquewhite;
-  &:hover {
-    cursor: pointer;
-    text-decoration: none;
-  }
+html, body {
+  padding: 0;
+  height: calc(100% - 8px);
+  border-color: #ccc;
 }

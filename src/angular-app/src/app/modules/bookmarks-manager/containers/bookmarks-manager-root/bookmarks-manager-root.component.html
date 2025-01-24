@@ -1,3 +1,15 @@
-<p>
-  bookmarks-manager-root works!
-</p>
+<section class="add-new-links">
+  <div class="flex flex-row w-full max-10rem">
+    <div class="flex w-full flex-row gap-2">
+      <input type="text" pInputText [(ngModel)]="newLink" />
+      <p-button label="Submit" styleClass="w-15rem p-button-primary" [disabled]="!newLink || newLink.length === 0" (click)="addBookmark(newLink)"/>
+      <p-button label="Clear All" styleClass="w-15rem p-button-danger" [disabled]="!bookmarks().length" (click)="removeAll()"/>
+    </div>
+  </div>
+</section>
+<section class="links-list">
+  <div class="py-2">
+    <app-bookmarks-list [items]="bookmarks()" (deleteItem)="removeBookmark($event)" (openItem)="openLink($event)"></app-bookmarks-list>
+  </div>
+</section>
+

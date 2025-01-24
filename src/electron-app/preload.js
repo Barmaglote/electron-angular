@@ -7,24 +7,24 @@ contextBridge.exposeInMainWorld('versions', {
   ping: () => ipcRenderer.invoke('ping')
 })
 
-contextBridge.exposeInMainWorld('api', {
+contextBridge.exposeInMainWorld('electron', {
   sendMessage: (channel, data) => {
     ipcRenderer.send(channel, data);
   },
   onMessage: (channel, callback) => {
-    ipcRenderer.on(channel, (event, ...args) => callback(...args));
+    ipcRenderer.on(channel, (event, ...args) => {
+      callback(event, ...args);
+    });
   },
   removeListener: (channel) => ipcRenderer.removeAllListeners(channel),
-});
-
-contextBridge.exposeInMainWorld('electron', {
   openExternalLink: (url) => {
     const { shell } = require('electron');
-    console.log(shell)
     shell.openExternal(url);
   },
   showAlert: (text) => {
     alert(text);
-  }
+  },
+  fetchUrl: (url) => ipcRenderer.invoke('fetch-url', url)
 });
+
 
