@@ -4,6 +4,8 @@ export interface ElectronAPI {
   removeListener: (channel: string) => void;
   fetchUrl: (url: string) => Promise<Response>;
   openExternalLink: (url: string) => void;
+  getCurrentWindow: () => Promise<BrowserWindow>;
+  getFileFromUser: (targetWindow: BrowserWindow) => Promise<string>;
 }
 
 declare global {

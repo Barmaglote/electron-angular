@@ -1,12 +1,15 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron')
 const { globalShortcut } = require('electron');
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
 const fetch = require('node-fetch');
+const fs = require('fs');
+
 let win;
+const windows = new Set();
 
 const createWindow = () => {
-  win = new BrowserWindow({
+  let newWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -19,15 +22,31 @@ const createWindow = () => {
     }
   });
 
+  console.log("createWindow");
+
   if (isDev) {
-    win.loadURL('http://localhost:4200');
+    newWindow.loadURL('http://localhost:4200');
   } else {
-    win.loadFile(path.join(__dirname, '../../../angular-app/browser/index.html'));
+    newWindow.loadFile(path.join(__dirname, '../../../angular-app/browser/index.html'));
   }
 
-  win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+  newWindow.on('closed', () => {
+    windows.delete(newWindow);
+    newWindow = null;
+  });
+
+  newWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
     console.error('Failed to load:', validatedURL, errorDescription);
   });
+
+  windows.add(newWindow);
+  win = newWindow;
+  return newWindow;
+}
+
+const getCurrentWindow = exports.getCurrentWindow = () => {
+  if (windows.size === 0) return null;
+  return windows.values().next().value;
 }
 
 app.on('will-quit', () => {
@@ -45,7 +64,7 @@ app.whenReady().then(() => {
   if (isDev) {
     globalShortcut.register('F12', () => {
       if (win) {
-        win.webContents.toggleDevTools();
+        getCurrentWindow().webContents.toggleDevTools();
       }
     });
   }
@@ -71,6 +90,41 @@ ipcMain.handle('fetch-url', async (event, url) => {
     throw error;
   }
 });
+
+ipcMain.handle('get-current-window', () => {
+
+  const currentWindow = getCurrentWindow();
+  if (!currentWindow) return null;
+  return {
+    id: currentWindow.id,
+    title: currentWindow.getTitle(),
+    bounds: currentWindow.getBounds()
+  };
+});
+
+ipcMain.handle('get-file-from-user', async (targetWindow) => {
+  return getFileFromUser(targetWindow);
+});
+
+
+const getFileFromUser = exports.getFileFromUser = (targetWindow) => {
+  dialog.showOpenDialog(targetWindow, {
+    properties: ['openFile'],
+    filters: [
+      { name: 'Text Files', extensions: ['txt'] },
+      { name: 'Markdown Files', extensions: ['md', 'markdown'] },
+    ]
+  }).then(files => {
+    if (files && files.filePaths?.length > 0) {
+      openFile(targetWindow, files.filePaths[0]);
+    }
+  });
+}
+
+const openFile = exports.openFile = (targetWindow, filePath) => {
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  getCurrentWindow().webContents.send('file-opened', {filePath, fileContent});
+}
 
 const createMenu = () => {
   template = [
@@ -98,19 +152,25 @@ const createMenu = () => {
         {
           label: 'Home',
           click: () => {
-            win.webContents.send('navigate-to-page', '/');
+            getCurrentWindow().webContents.send('navigate-to-page', '/');
           }
         },
         {
           label: 'Bookmarks Manager',
           click: () => {
-            win.webContents.send('navigate-to-page', 'bookmarks-manager');
+            getCurrentWindow().webContents.send('navigate-to-page', 'bookmarks-manager');
+          }
+        },
+        {
+          label: 'Markdown Editor',
+          click: () => {
+            getCurrentWindow().webContents.send('navigate-to-page', 'markdown-editor');
           }
         },
         {
           label: 'Self Test',
           click: () => {
-            win.webContents.send('navigate-to-page', 'self-test');
+            getCurrentWindow().webContents.send('navigate-to-page', 'self-test');
           }
         },
       ]
@@ -147,7 +207,7 @@ const createMenu = () => {
         {
           label: 'DevTools',
           click: () => {
-            win.toggleDevTools();
+            getCurrentWindow().toggleDevTools();
           }
         }
       ]

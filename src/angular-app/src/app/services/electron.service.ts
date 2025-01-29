@@ -18,4 +18,12 @@ export class ElectronService {
   removeListener(channel: string) {
     window.electron.removeListener(channel);
   }
+
+  getCurrentWindow() {
+    return window.electron.getCurrentWindow();
+  }
+
+  getFileFromUser(targetWindow: any) {
+    return window.electron.getFileFromUser(targetWindow);
+  }
 }

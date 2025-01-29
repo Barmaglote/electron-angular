@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -8,11 +9,10 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './home-root.component.html',
   styleUrls: ['./home-root.component.scss']
 })
-export class HomeRootComponent implements OnInit {
+export class HomeRootComponent {
+  constructor (private router: Router) {}
 
-  constructor() { }
-
-  ngOnInit() {
+  openStartPage() {
+    this.router.navigate(['/markdown-editor']);
   }
-
 }

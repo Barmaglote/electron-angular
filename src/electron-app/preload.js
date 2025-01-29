@@ -24,7 +24,9 @@ contextBridge.exposeInMainWorld('electron', {
   showAlert: (text) => {
     alert(text);
   },
-  fetchUrl: (url) => ipcRenderer.invoke('fetch-url', url)
+  fetchUrl: (url) => ipcRenderer.invoke('fetch-url', url),
+  getCurrentWindow: () => ipcRenderer.invoke('get-current-window'),
+  getFileFromUser: (targetWindow) => ipcRenderer.invoke('get-file-from-user', targetWindow),
 });
 
 
