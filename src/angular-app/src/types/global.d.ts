@@ -6,6 +6,7 @@ export interface ElectronAPI {
   openExternalLink: (url: string) => void;
   getCurrentWindow: () => Promise<BrowserWindow>;
   getFileFromUser: (targetWindow: BrowserWindow) => Promise<string>;
+  setTitle: (title: string) => void;
 }
 
 declare global {

@@ -26,4 +26,8 @@ export class ElectronService {
   getFileFromUser(targetWindow: any) {
     return window.electron.getFileFromUser(targetWindow);
   }
+
+  setTitle(title: string) {
+    window.electron.setTitle(title);
+  }
 }

@@ -1,0 +1,9 @@
+<div class="flex flex-column gap-2 w-20rem">
+  <div class="flex flex-column">
+    <label>Title:</label>
+    <input type="text" pInputText [(ngModel)]="title" />
+  </div>
+  <div>
+    <p-button id="btn" type="button" (onClick)="setTitle.emit(title)"><div class="w-5rem">Set title</div></p-button>
+  </div>
+<div>

@@ -53,6 +53,13 @@ app.on('will-quit', () => {
   globalShortcut.unregisterAll();
 });
 
+function handleSetTitle (event, title) {
+  console.log(title);
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  win.setTitle(title);
+}
+
 app.whenReady().then(() => {
   createWindow();
   createMenu();
@@ -60,6 +67,8 @@ app.whenReady().then(() => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  ipcMain.on('set-title', handleSetTitle);
 
   if (isDev) {
     globalShortcut.register('F12', () => {
