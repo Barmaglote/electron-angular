@@ -1,1 +1,7 @@
-<app-set-title (setTitle)="setTitle($event)"></app-set-title>
+<div class="w-full flex gap-2 flex-column">
+  <h3>Title for the window (1-way ipc binding)</h3>
+  <app-set-title (setTitle)="setTitle($event)"></app-set-title>
+  <h3>Display ping results (1-way ipc binding)</h3>
+  <app-ping (startPing)="startPing($event)" [response]="response"></app-ping>
+</div>
+

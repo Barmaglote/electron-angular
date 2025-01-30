@@ -27,7 +27,8 @@ contextBridge.exposeInMainWorld('electron', {
   fetchUrl: (url) => ipcRenderer.invoke('fetch-url', url),
   getCurrentWindow: () => ipcRenderer.invoke('get-current-window'),
   getFileFromUser: (targetWindow) => ipcRenderer.invoke('get-file-from-user', targetWindow),
-  setTitle: (title) => ipcRenderer.send('set-title', title)
+  setTitle: (title) => ipcRenderer.send('set-title', title),
+  ping: (address) => ipcRenderer.invoke('run-ping', address)
 });
 
 

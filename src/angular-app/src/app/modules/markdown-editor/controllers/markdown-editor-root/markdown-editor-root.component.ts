@@ -46,4 +46,9 @@ export class MarkdownEditorRootComponent implements OnInit {
     const mk = marked(event.target.value);
     this.markdown.set(mk.toString());
   }
+
+  newFile() {
+    this.markdown.set('');
+    this.rawText.set('');
+  }
 }

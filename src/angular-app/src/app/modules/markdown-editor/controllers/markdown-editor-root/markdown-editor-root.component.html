@@ -1,15 +1,14 @@
 <div class="w-full flex flex-column gap-2">
   <div class="w-full flex gap-2">
-    <p-button label="New"></p-button>
+    <p-button label="New" (onClick)="newFile()"></p-button>
     <p-button label="Open" (onClick)="openFile()"></p-button>
-    <p-button label="Clean"></p-button>
   </div>
   <div class="w-full flex">
     <div class="flex w-6 p-2">
       <textarea class="w-full" [rows]="10" [cols]="20" pTextarea [value]="rawText()" (keyup)="onKeyUp($event)"></textarea>
     </div>
     <div class="flex w-6 p-2">
-      <div [innerHTML]="markdown()" class="shadow-2 p-3 border-round-xl"></div>
+      <div [innerHTML]="markdown()" class="shadow-2 p-3 border-round-xl w-full"></div>
     </div>
   </div>
 </div>

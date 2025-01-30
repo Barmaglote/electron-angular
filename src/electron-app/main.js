@@ -44,6 +44,12 @@ const createWindow = () => {
   return newWindow;
 }
 
+ipcMain.handle('run-ping', async (event, host) => {
+  const ping = require('ping');
+  const result = await ping.promise.probe(host);
+  return result;
+});
+
 const getCurrentWindow = exports.getCurrentWindow = () => {
   if (windows.size === 0) return null;
   return windows.values().next().value;

@@ -1,0 +1,10 @@
+<div class="flex flex-column gap-2 w-20rem">
+  <div class="flex flex-column">
+    <label>Host:</label>
+    <input type="text" pInputText [(ngModel)]="url" />
+  </div>
+  <div class="flex w-full">{{response}}</div>
+  <div class="flex w-full">
+    <p-button label="Ping" (onClick)="startPing.emit(url)"></p-button>
+  </div>
+</div>

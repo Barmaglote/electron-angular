@@ -30,4 +30,8 @@ export class ElectronService {
   setTitle(title: string) {
     window.electron.setTitle(title);
   }
+
+  startPing(url: string) {
+    return window.electron.ping(url);
+  }
 }
