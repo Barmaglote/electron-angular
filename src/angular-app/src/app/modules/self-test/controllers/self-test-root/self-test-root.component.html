@@ -3,5 +3,9 @@
   <app-set-title (setTitle)="setTitle($event)"></app-set-title>
   <h3>Display ping results (1-way ipc binding)</h3>
   <app-ping (startPing)="startPing($event)" [response]="response"></app-ping>
+  <h3>Increment counter</h3>
+  <app-counter-field></app-counter-field>
+  <h3>Theme Switcher</h3>
+  <app-theme-switcher [theme]="'System'" (switchThemeDarkMode)="onSwitchThemeDarkMode()" (switchThemeSystemMode)="onSwitchThemeSystemMode()"></app-theme-switcher>
 </div>
 

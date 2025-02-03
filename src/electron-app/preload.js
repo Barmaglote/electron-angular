@@ -7,6 +7,11 @@ contextBridge.exposeInMainWorld('versions', {
   ping: () => ipcRenderer.invoke('ping')
 })
 
+contextBridge.exposeInMainWorld('darkMode', {
+  toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
+  system: () => ipcRenderer.invoke('dark-mode:system')
+})
+
 contextBridge.exposeInMainWorld('electron', {
   sendMessage: (channel, data) => {
     ipcRenderer.send(channel, data);
@@ -19,7 +24,7 @@ contextBridge.exposeInMainWorld('electron', {
   removeListener: (channel) => ipcRenderer.removeAllListeners(channel),
   openExternalLink: (url) => {
     const { shell } = require('electron');
-    shell.openExternal(url);
+    shell.openExternal(url); // not safe !!!
   },
   showAlert: (text) => {
     alert(text);
@@ -28,7 +33,11 @@ contextBridge.exposeInMainWorld('electron', {
   getCurrentWindow: () => ipcRenderer.invoke('get-current-window'),
   getFileFromUser: (targetWindow) => ipcRenderer.invoke('get-file-from-user', targetWindow),
   setTitle: (title) => ipcRenderer.send('set-title', title),
-  ping: (address) => ipcRenderer.invoke('run-ping', address)
+  ping: (address) => ipcRenderer.invoke('run-ping', address),
+  onUpdateCounter: (callback) => ipcRenderer.on('update-counter', (_event, value) => {
+    callback(_event, value);
+  }),
+  counterValue: (value) => ipcRenderer.send('counter-value', value)
 });
 
 

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, dialog, nativeTheme } = require('electron')
 const { globalShortcut } = require('electron');
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
@@ -16,6 +16,8 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: true,
+      sandbox: true,  // Включаем безопасный sandbox
+      enableRemoteModule: false, // Отключаем устаревший remote API
       webSecurity: true,
       allowRunningInsecureContent: false,
       contentSecurityPolicy: "default-src 'self'; script-src 'self';",
@@ -50,6 +52,20 @@ ipcMain.handle('run-ping', async (event, host) => {
   return result;
 });
 
+ipcMain.handle('dark-mode:toggle', () => {
+  console.log("dark-mode:toggle");
+  if (nativeTheme.shouldUseDarkColors) {
+    nativeTheme.themeSource = 'light'
+  } else {
+    nativeTheme.themeSource = 'dark'
+  }
+  return nativeTheme.shouldUseDarkColors
+})
+
+ipcMain.handle('dark-mode:system', () => {
+  nativeTheme.themeSource = 'system'
+})
+
 const getCurrentWindow = exports.getCurrentWindow = () => {
   if (windows.size === 0) return null;
   return windows.values().next().value;
@@ -83,6 +99,10 @@ app.whenReady().then(() => {
       }
     });
   }
+
+  ipcMain.on('counter-value', (_event, value) => {
+    getCurrentWindow().setTitle(getCurrentWindow().getTitle() + ' : ' + value);
+  })
 });
 
 app.on('window-all-closed', () => {
@@ -121,7 +141,6 @@ ipcMain.handle('get-file-from-user', async (targetWindow) => {
   return getFileFromUser(targetWindow);
 });
 
-
 const getFileFromUser = exports.getFileFromUser = (targetWindow) => {
   dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
@@ -140,6 +159,8 @@ const openFile = exports.openFile = (targetWindow, filePath) => {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   getCurrentWindow().webContents.send('file-opened', {filePath, fileContent});
 }
+
+// Menu.setApplicationMenu(null)
 
 const createMenu = () => {
   template = [
@@ -207,8 +228,19 @@ const createMenu = () => {
           label: 'Paste',
           accelerator: 'CmdOrCtrl+V',
           role: 'paste'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          click: () => getCurrentWindow().webContents.send('update-counter', 1),
+          label: 'Increment'
+        },
+        {
+          click: () => getCurrentWindow().webContents.send('update-counter', -1),
+          label: 'Decrement'
         }
-      ]
+      ],
     },
     {
       label: 'Help',
@@ -231,3 +263,11 @@ const createMenu = () => {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }
+
+// Test of structuredClone
+const original = { name: "Alice", date: new Date(), nested: { key: "value" } };
+const clone = structuredClone(original);
+
+console.log(clone); // Глубокая копия объекта
+console.log(clone === original); // false
+console.log(clone.date === original.date); // false

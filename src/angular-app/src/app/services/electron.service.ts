@@ -34,4 +34,20 @@ export class ElectronService {
   startPing(url: string) {
     return window.electron.ping(url);
   }
+
+  onUpdateCounter(callback: (event: any, data: any) => void) {
+    window.electron.onUpdateCounter(callback);
+  }
+
+  counterValue(newValue: number) {
+    window.electron.counterValue(newValue)
+  }
+
+  switchThemeDarkMode() {
+    window.darkMode.toggle();
+  }
+
+  switchThemeSystemMode() {
+    window.darkMode.system();
+  }
 }

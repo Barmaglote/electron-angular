@@ -5,3 +5,15 @@ html, body {
   height: calc(100% - 8px);
   border-color: #ccc;
 }
+
+@media (prefers-color-scheme: dark) {
+  body { background: #333; color: white; }
+}
+
+@media (prefers-color-scheme: light) {
+  body { background: #ddd; color: black; }
+}
+
+:root {
+  color-scheme: light dark;
+}
