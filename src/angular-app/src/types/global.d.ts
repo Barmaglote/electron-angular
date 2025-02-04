@@ -13,8 +13,8 @@ export interface ElectronAPI {
 }
 
 export interface DarkModeAPI {
-  toggle: () => void;
-  system: () => void;
+  toggle: () => Promise<boolean>;
+  system: () => Promise<void>;
 }
 
 declare global {

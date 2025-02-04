@@ -1,5 +1,7 @@
-<div>
-  <strong id="theme-source">{{theme}}</strong>
-  <button id="toggle-dark-mode" (click)="switchThemeDarkMode.emit()">Toggle Dark Mode</button>
-  <button id="reset-to-system" (click)="switchThemeSystemMode.emit()">Reset to System Theme</button>
+<div class="flex flex-column gap-2">
+  <div><strong id="theme-source">{{theme}}</strong></div>
+  <div class="flex flex-row gap-2">
+    <button id="toggle-dark-mode" class="p-button" (click)="switchThemeDarkMode.emit()">Toggle Dark Mode</button>
+    <button id="reset-to-system" class="p-button" (click)="switchThemeSystemMode.emit()">Reset to System Theme</button>
+  </div>
 </div>

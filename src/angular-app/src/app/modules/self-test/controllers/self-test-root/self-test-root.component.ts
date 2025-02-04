@@ -14,6 +14,7 @@ import { ThemeSwitcherComponent } from "../../components/theme-switcher/theme-sw
 })
 export class SelfTestRootComponent {
   public response: string = '';
+  public theme: string = '';
   constructor(private electronService: ElectronService) { }
 
   setTitle(title: string) {
@@ -26,11 +27,13 @@ export class SelfTestRootComponent {
     })
   }
 
-  onSwitchThemeDarkMode() {
-    this.electronService.switchThemeDarkMode();
+  async onSwitchThemeDarkMode() {
+    const isDarkMode = await this.electronService.switchThemeDarkMode();
+    this.theme = isDarkMode ? 'dark' : 'light';
   }
 
-  onSwitchThemeSystemMode() {
-    this.electronService.switchThemeSystemMode();
+  async onSwitchThemeSystemMode() {
+    await this.electronService.switchThemeSystemMode();
+    this.theme = 'System';
   }
 }

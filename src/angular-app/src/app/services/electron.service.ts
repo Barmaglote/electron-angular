@@ -44,7 +44,7 @@ export class ElectronService {
   }
 
   switchThemeDarkMode() {
-    window.darkMode.toggle();
+    return window.darkMode.toggle();
   }
 
   switchThemeSystemMode() {
